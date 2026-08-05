@@ -1,24 +1,96 @@
 {
   "name": "Page Steel",
   "displayName": "Page Steel Material Inventory Map",
-  "center": {"latitude": 36.8904302, "longitude": -111.4496704},
+  "center": {
+    "latitude": 36.8904302,
+    "longitude": -111.4496704
+  },
   "zoom": 17,
-  "boundary": [],
-  "boundaryStatus": "awaiting-confirmed-coordinates",
-  "sourcePin": "https://maps.app.goo.gl/sfVarhJMakDfNpyx8?g_st=ac",
-  "boundarySourceLinks": [
-    "https://maps.app.goo.gl/fJKfCcuSRxK4VVum8?g_st=ac",
-    "https://maps.app.goo.gl/ABQQi7SdB1Y3u1Kt5",
-    "https://maps.app.goo.gl/SYtcckvS4718TXsy6",
-    "https://maps.app.goo.gl/zfWHLrdGhL4gXRy6A?g_st=ac",
-    "https://maps.app.goo.gl/dnK6rwUGGg6GQBRQ8?g_st=ac",
-    "https://maps.app.goo.gl/B6YhT2whwvZKQkDb6?g_st=ac",
-    "https://maps.app.goo.gl/762hJvTmpTiStbgf7?g_st=ac",
-    "https://maps.app.goo.gl/qUARnJ3HsJjfb8Zv7?g_st=ac",
-    "https://maps.app.goo.gl/xfb2cR3Kx1bhHjgW9?g_st=ac",
-    "https://maps.app.goo.gl/aB158cTLfzkECY9T6?g_st=ac",
-    "https://maps.app.goo.gl/iuSyp6ZxqEmz9yFU9?g_st=ac",
-    "https://maps.app.goo.gl/c3Cz1brg6BsKgsfM6",
-    "https://maps.app.goo.gl/iAPnBXQJbPtuwGrf9"
-  ]
+  "boundary": [
+    {
+      "latitude": 36.89411641467404,
+      "longitude": -111.45029123544094
+    },
+    {
+      "latitude": 36.893172570729796,
+      "longitude": -111.45284529183073
+    },
+    {
+      "latitude": 36.89112049516254,
+      "longitude": -111.45191018066203
+    },
+    {
+      "latitude": 36.89023667967473,
+      "longitude": -111.45178140470959
+    },
+    {
+      "latitude": 36.89007483245272,
+      "longitude": -111.45277166000369
+    },
+    {
+      "latitude": 36.89089000417223,
+      "longitude": -111.45389844958741
+    },
+    {
+      "latitude": 36.890732382709416,
+      "longitude": -111.45511736426712
+    },
+    {
+      "latitude": 36.88894757066116,
+      "longitude": -111.454114894095
+    },
+    {
+      "latitude": 36.88792405618384,
+      "longitude": -111.45335874801717
+    },
+    {
+      "latitude": 36.88666514129542,
+      "longitude": -111.45262357139184
+    },
+    {
+      "latitude": 36.8860553458042,
+      "longitude": -111.45025492124851
+    },
+    {
+      "latitude": 36.88711452815735,
+      "longitude": -111.44696568888841
+    },
+    {
+      "latitude": 36.88738054283236,
+      "longitude": -111.44715885281704
+    },
+    {
+      "latitude": 36.88771520513921,
+      "longitude": -111.4462144958326
+    },
+    {
+      "latitude": 36.88811878023704,
+      "longitude": -111.44614746694332
+    },
+    {
+      "latitude": 36.889653184103075,
+      "longitude": -111.44711441338318
+    },
+    {
+      "latitude": 36.890449484124886,
+      "longitude": -111.44467988811253
+    },
+    {
+      "latitude": 36.891298974503954,
+      "longitude": -111.44517352926351
+    },
+    {
+      "latitude": 36.89144484563825,
+      "longitude": -111.44573155839068
+    },
+    {
+      "latitude": 36.892311486041194,
+      "longitude": -111.44653640809334
+    },
+    {
+      "latitude": 36.891644049513026,
+      "longitude": -111.44845930001011
+    }
+  ],
+  "boundaryStatus": "manually-traced"
 }
