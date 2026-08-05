@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Square tubing placeholder</title><desc id="desc">Industrial illustration of stacked square steel tubes.</desc>
+  <rect width="800" height="500" fill="#dfe5e8"/>
+  <g transform="translate(105 90)" stroke="#273746" stroke-width="14" fill="#9b5d3c">
+    <rect x="0" y="0" width="500" height="54"/><rect x="60" y="86" width="520" height="54"/><rect x="10" y="172" width="530" height="54"/><rect x="75" y="258" width="480" height="54"/>
+  </g>
+  <g fill="#17212b"><rect x="91" y="77" width="80" height="80"/><rect x="151" y="163" width="80" height="80"/><rect x="101" y="249" width="80" height="80"/><rect x="166" y="335" width="80" height="80"/></g>
+  <g fill="#dfe5e8"><rect x="112" y="98" width="38" height="38"/><rect x="172" y="184" width="38" height="38"/><rect x="122" y="270" width="38" height="38"/><rect x="187" y="356" width="38" height="38"/></g>
+  <text x="400" y="468" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" fill="#435568">DEMO PLACEHOLDER · SQUARE TUBING</text>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "materials": ["Steel", "Stainless steel", "Aluminum", "Copper", "Brass", "Lumber", "Concrete", "Plastic", "Equipment", "Mixed material"],
+  "forms": ["Angle", "Channel", "I-beam / wide-flange beam", "Flat bar", "Round bar", "Rebar", "Plate", "Sheet", "Square tubing", "Rectangular tubing", "Round tubing", "Pipe", "Wire", "Mesh", "Structural assembly", "Equipment", "Miscellaneous scrap"],
+  "aliases": {
+    "angle": ["angle iron", "l angle", "l-shaped steel"],
+    "square tubing": ["square tube", "box tubing", "hollow square steel", "hss"],
+    "rectangular tubing": ["rectangular tube", "box section", "rectangular hss"],
+    "round tubing": ["round tube", "circular tubing", "hollow round steel"],
+    "pipe": ["steel pipe", "casing", "round pipe"],
+    "i-beam / wide-flange beam": ["i beam", "h beam", "wide flange", "structural beam"],
+    "plate": ["steel plate", "thick sheet"],
+    "sheet": ["sheet metal", "steel sheet", "thin plate"],
+    "rebar": ["reinforcing bar", "reinforcement steel"],
+    "mesh": ["wire mesh", "steel mesh", "welded wire"]
+  }
+}

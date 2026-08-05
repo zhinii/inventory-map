@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Collect Photos · Page Steel Material Inventory Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Collection workspace</p>
+      <h1>Prepare material photographs</h1>
+      <p>Extract GPS metadata, correct material positions, add searchable knowledge, and export project data.</p>
+    </div>
+    <a class="secondary-button" href="index.html">Open public search</a>
+  </header>
+
+  <main class="collector-shell">
+    <section class="collector-controls">
+      <div class="card-like">
+        <p class="step-label">1 · Import originals</p>
+        <h2>Select OnePlus photos</h2>
+        <label class="file-picker" for="photoInput">Choose original JPG/HEIC files</label>
+        <input id="photoInput" type="file" accept="image/jpeg,image/heic,image/heif" multiple>
+        <p class="helper">Use untouched camera files. Messaging apps and screenshots may remove GPS metadata.</p>
+        <div id="importStatus" class="status-box" aria-live="polite">No photos selected.</div>
+      </div>
+
+      <div class="card-like">
+        <p class="step-label">2 · Optional boundary</p>
+        <h2>Trace the property</h2>
+        <p class="helper">Start editing, click boundary points in order on the map, then export <code>site.json</code>.</p>
+        <div class="button-row">
+          <button id="toggleBoundary" class="secondary-button" type="button">Start boundary editing</button>
+          <button id="undoBoundary" class="text-button" type="button">Undo last point</button>
+          <button id="clearBoundary" class="text-button danger" type="button">Clear boundary</button>
+        </div>
+      </div>
+
+      <div class="card-like">
+        <p class="step-label">3 · Export</p>
+        <h2>Download project data</h2>
+        <div class="button-row stacked-mobile">
+          <button id="exportInventory" class="primary-button" type="button">Export inventory.json</button>
+          <button id="exportSite" class="secondary-button" type="button">Export site.json</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="collector-map-panel">
+      <div id="collectorMap" role="application" aria-label="Photo and boundary editing map"></div>
+      <p class="map-note">Photo pins begin at the camera GPS coordinate. Drag each pin onto the photographed material when needed.</p>
+    </section>
+
+    <section class="records-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="step-label">4 · Add yard knowledge</p>
+          <h2>Photo records</h2>
+        </div>
+        <span id="recordCount" class="count-badge">0</span>
+      </div>
+      <div id="records" class="record-list">
+        <p class="empty-state">Imported photos will appear here.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
+  <script src="js/collector.js"></script>
+</body>
+</html>

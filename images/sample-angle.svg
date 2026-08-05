@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Angle iron placeholder</title><desc id="desc">Industrial illustration of stacked angle iron.</desc>
+  <rect width="800" height="500" fill="#dfe5e8"/>
+  <g fill="none" stroke="#7c4b32" stroke-width="44" stroke-linejoin="miter">
+    <path d="M145 115V170H625"/><path d="M110 205V260H650"/><path d="M165 295V350H610"/>
+  </g>
+  <g fill="none" stroke="#273746" stroke-width="8"><path d="M145 115V170H625"/><path d="M110 205V260H650"/><path d="M165 295V350H610"/></g>
+  <text x="400" y="468" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" fill="#435568">DEMO PLACEHOLDER · ANGLE IRON</text>
+</svg>

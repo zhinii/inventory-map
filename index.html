@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Page Steel Material Inventory Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Public proof of concept</p>
+      <h1>Page Steel Material Inventory Map</h1>
+      <p>Search the yard’s captured knowledge and reveal likely places to look.</p>
+    </div>
+    <a class="secondary-button" href="collect.html">Collect &amp; prepare photos</a>
+  </header>
+
+  <main class="app-shell">
+    <section class="search-panel" aria-labelledby="search-heading">
+      <div class="panel-heading">
+        <div>
+          <p class="step-label">1 · Describe the material</p>
+          <h2 id="search-heading">What are you looking for?</h2>
+        </div>
+        <button id="clearSearch" class="text-button" type="button">Clear</button>
+      </div>
+
+      <label for="material">Material</label>
+      <select id="material">
+        <option value="">Any material</option>
+      </select>
+
+      <label for="form">Geometry or general type</label>
+      <select id="form">
+        <option value="">Any geometry</option>
+      </select>
+
+      <label for="query">Description or ordinary name</label>
+      <input id="query" type="search" placeholder="Example: rusted square tubing, 4-inch angle iron, galvanized round pipe">
+      <p class="helper">Use technical or everyday language. The search checks material, shape, alternate names, appearance, descriptions, and notes.</p>
+
+      <button id="searchButton" class="primary-button" type="button">Find likely locations</button>
+      <div id="status" class="status-box" aria-live="polite">Material locations remain hidden until you search.</div>
+
+      <section class="results-section" aria-labelledby="results-heading">
+        <div class="panel-heading compact">
+          <h2 id="results-heading">Likely locations</h2>
+          <span id="resultCount" class="count-badge">0</span>
+        </div>
+        <div id="results" class="results-list">
+          <p class="empty-state">Search results will appear here with photos and directions.</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="map-panel" aria-labelledby="map-heading">
+      <div class="map-toolbar">
+        <div>
+          <p class="step-label">2 · Review matches</p>
+          <h2 id="map-heading">Page Steel yard</h2>
+        </div>
+        <span class="privacy-note">Pins appear only after a search</span>
+      </div>
+      <div id="map" role="application" aria-label="Interactive material location map"></div>
+      <p class="map-note">The current site outline is a framework. Replace it with the traced boundary from the collection page when confirmed.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Proof-of-concept scope:</strong> results are likely places to look, not verified quantities or availability.</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+[
+  {
+    "id":"DEMO-001","demo":true,"title":"Galvanized round pipe","industry":"metal salvage","material":"Steel","form":"Pipe","attributes":["galvanized","silver","round","long","bundled"],"description":"Demonstration record for bundles of galvanized round steel pipe.","tags":["galvanized pipe","silver pipe","round tubing","steel pipe","long stock"],"landmark":"Example location only","notes":"Replace with a real Page Steel photograph and verified material position.","cameraLocation":{"latitude":36.8907,"longitude":-111.4499},"materialLocation":{"latitude":36.89072,"longitude":-111.44982},"images":["images/demo-pipe.svg"],"capturedAt":"2026-08-05T13:29:40","lastVerified":"2026-08-05","status":"demo"
+  },
+  {
+    "id":"DEMO-002","demo":true,"title":"Square steel tubing","industry":"metal salvage","material":"Steel","form":"Square tubing","attributes":["rusted","square","hollow","long"],"description":"Demonstration record for mixed square steel tubing.","tags":["square tube","box tubing","hollow steel","rusted tubing","hss"],"landmark":"Example location only","notes":"Demonstrates generic and technical search names.","cameraLocation":{"latitude":36.8902,"longitude":-111.4494},"materialLocation":{"latitude":36.89025,"longitude":-111.44935},"images":["images/demo-square.svg"],"capturedAt":"2026-08-05T13:31:10","lastVerified":"2026-08-05","status":"demo"
+  },
+  {
+    "id":"DEMO-003","demo":true,"title":"Structural angle and beams","industry":"metal salvage","material":"Steel","form":"Angle","attributes":["structural","orange","rusted","long"],"description":"Demonstration record for angle iron and structural beam stock.","tags":["angle iron","l angle","structural steel","beam","orange steel"],"landmark":"Example location only","notes":"Shows how one location can include related material terms.","cameraLocation":{"latitude":36.8905,"longitude":-111.4491},"materialLocation":{"latitude":36.89052,"longitude":-111.44905},"images":["images/demo-angle.svg"],"capturedAt":"2026-08-05T13:34:02","lastVerified":"2026-08-05","status":"demo"
+  }
+]

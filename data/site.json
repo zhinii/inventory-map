@@ -1,0 +1,24 @@
+{
+  "name": "Page Steel",
+  "displayName": "Page Steel Material Inventory Map",
+  "center": {"latitude": 36.8904302, "longitude": -111.4496704},
+  "zoom": 17,
+  "boundary": [],
+  "boundaryStatus": "awaiting-confirmed-coordinates",
+  "sourcePin": "https://maps.app.goo.gl/sfVarhJMakDfNpyx8?g_st=ac",
+  "boundarySourceLinks": [
+    "https://maps.app.goo.gl/fJKfCcuSRxK4VVum8?g_st=ac",
+    "https://maps.app.goo.gl/ABQQi7SdB1Y3u1Kt5",
+    "https://maps.app.goo.gl/SYtcckvS4718TXsy6",
+    "https://maps.app.goo.gl/zfWHLrdGhL4gXRy6A?g_st=ac",
+    "https://maps.app.goo.gl/dnK6rwUGGg6GQBRQ8?g_st=ac",
+    "https://maps.app.goo.gl/B6YhT2whwvZKQkDb6?g_st=ac",
+    "https://maps.app.goo.gl/762hJvTmpTiStbgf7?g_st=ac",
+    "https://maps.app.goo.gl/qUARnJ3HsJjfb8Zv7?g_st=ac",
+    "https://maps.app.goo.gl/xfb2cR3Kx1bhHjgW9?g_st=ac",
+    "https://maps.app.goo.gl/aB158cTLfzkECY9T6?g_st=ac",
+    "https://maps.app.goo.gl/iuSyp6ZxqEmz9yFU9?g_st=ac",
+    "https://maps.app.goo.gl/c3Cz1brg6BsKgsfM6",
+    "https://maps.app.goo.gl/iAPnBXQJbPtuwGrf9"
+  ]
+}

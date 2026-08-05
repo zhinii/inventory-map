@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Pipe placeholder</title><desc id="desc">Industrial illustration of bundled round pipes.</desc>
+  <rect width="800" height="500" fill="#dfe5e8"/>
+  <g fill="#8697a4" stroke="#273746" stroke-width="13">
+    <rect x="130" y="105" width="510" height="55" rx="27"/><rect x="95" y="190" width="560" height="55" rx="27"/><rect x="145" y="275" width="500" height="55" rx="27"/>
+  </g>
+  <g fill="#17212b"><circle cx="130" cy="132" r="34"/><circle cx="95" cy="217" r="34"/><circle cx="145" cy="302" r="34"/></g>
+  <g fill="#dfe5e8"><circle cx="130" cy="132" r="15"/><circle cx="95" cy="217" r="15"/><circle cx="145" cy="302" r="15"/></g>
+  <text x="400" y="468" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" fill="#435568">DEMO PLACEHOLDER · ROUND PIPE</text>
+</svg>
