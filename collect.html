@@ -3,73 +3,131 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Collect Photos · Page Steel Material Inventory Map</title>
+  <meta name="theme-color" content="#17202a">
+  <title>Add Material Photos · Page Steel</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
   <header class="site-header">
     <div>
-      <p class="eyebrow">Collection workspace</p>
-      <h1>Prepare material photographs</h1>
-      <p>Extract GPS metadata, correct material positions, add searchable knowledge, and export project data.</p>
+      <p class="eyebrow">Employee test uploader</p>
+      <h1>Add or update material photos</h1>
+      <p>Take a photo, confirm nearby material, label what is shown, and save it to the live map.</p>
     </div>
-    <a class="secondary-button" href="index.html">Open public search</a>
+    <a class="secondary-button header-action" href="index.html">Open material search</a>
   </header>
 
-  <main class="collector-shell">
-    <section class="collector-controls">
-      <div class="card-like">
-        <p class="step-label">1 · Import originals</p>
-        <h2>Select OnePlus photos</h2>
-        <label class="file-picker" for="photoInput">Choose original JPG/HEIC files</label>
-        <input id="photoInput" type="file" accept="image/jpeg,image/heic,image/heif" multiple>
-        <p class="helper">Use untouched camera files. Messaging apps and screenshots may remove GPS metadata.</p>
-        <div id="importStatus" class="status-box" aria-live="polite">No photos selected.</div>
+  <main class="upload-shell">
+    <section class="upload-form-panel">
+      <div class="card-like upload-step">
+        <p class="step-label">1 · Employee</p>
+        <h2>Who is recording this?</h2>
+        <label for="employeeName">Employee name</label>
+        <input id="employeeName" type="text" autocomplete="name" placeholder="First and last name" required>
+        <p class="helper">For this proof of concept, the name is typed and remembered on this phone. It is not a verified login.</p>
       </div>
 
-      <div class="card-like">
-        <p class="step-label">2 · Optional boundary</p>
-        <h2>Trace the property</h2>
-        <p class="helper">Start editing, click boundary points in order on the map, then export <code>site.json</code>.</p>
-        <div class="button-row">
-          <button id="toggleBoundary" class="secondary-button" type="button">Start boundary editing</button>
-          <button id="undoBoundary" class="text-button" type="button">Undo last point</button>
-          <button id="clearBoundary" class="text-button danger" type="button">Clear boundary</button>
-        </div>
+      <div class="card-like upload-step">
+        <p class="step-label">2 · Photograph</p>
+        <h2>Take or select a photo</h2>
+        <label class="file-picker" for="photoInput">Open camera or choose photo</label>
+        <input id="photoInput" type="file" accept="image/*" capture="environment">
+        <img id="photoPreview" class="upload-preview hidden" alt="Selected material photograph">
+        <div id="photoStatus" class="status-box" aria-live="polite">No photo selected.</div>
       </div>
 
-      <div class="card-like">
-        <p class="step-label">3 · Export</p>
-        <h2>Download project data</h2>
-        <div class="button-row stacked-mobile">
-          <button id="exportInventory" class="primary-button" type="button">Export inventory.json</button>
-          <button id="exportSite" class="secondary-button" type="button">Export site.json</button>
+      <div class="card-like upload-step">
+        <p class="step-label">3 · Nearby check</p>
+        <h2>Is this updating something already mapped?</h2>
+        <p id="gpsSummary" class="helper">Choose a photo first. The page will request the phone location and look for nearby current records.</p>
+        <div id="nearbyRecords" class="nearby-list">
+          <p class="empty-state">Nearby records will appear here.</p>
         </div>
+        <button id="chooseNew" class="secondary-button full-width" type="button" disabled>None of these — create a separate location</button>
+        <div id="selectionStatus" class="status-box" aria-live="polite">No existing location selected.</div>
+      </div>
+
+      <div class="card-like upload-step">
+        <p class="step-label">4 · Labels</p>
+        <h2>What is intentionally documented?</h2>
+
+        <fieldset>
+          <legend>Materials — select all that apply</legend>
+          <div id="materialsGrid" class="choice-grid"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Profiles or forms — select all that apply</legend>
+          <div id="profilesGrid" class="choice-grid"></div>
+        </fieldset>
+
+        <div class="field-grid">
+          <label>Condition
+            <select id="condition" required>
+              <option value="">Select condition</option>
+              <option>New</option><option>Used</option><option>Scrap</option><option>Mixed</option><option>Unknown</option>
+            </select>
+          </label>
+
+          <label>Estimated lengths
+            <select id="lengthRange" required>
+              <option value="">Select length range</option>
+              <option>Under 2 feet</option><option>2–5 feet</option><option>5–10 feet</option><option>10–20 feet</option><option>Over 20 feet</option><option>Mixed lengths</option><option>Unknown</option>
+            </select>
+          </label>
+
+          <label>Estimated profile size
+            <select id="sizeRange" required>
+              <option value="">Select size range</option>
+              <option>Under 1 inch</option><option>1–2 inches</option><option>2–4 inches</option><option>4–8 inches</option><option>Over 8 inches</option><option>Thin sheet</option><option>Up to 1/8 inch thick</option><option>1/8–1/4 inch thick</option><option>1/4–1/2 inch thick</option><option>Over 1/2 inch thick</option><option>Small</option><option>Medium</option><option>Large</option><option>Mixed sizes</option><option>Unknown</option>
+            </select>
+          </label>
+
+          <label>Estimated quantity
+            <select id="quantityRange" required>
+              <option value="">Select quantity</option>
+              <option>One item</option><option>2–10 pieces</option><option>11–50 pieces</option><option>More than 50 pieces</option><option>Bundle</option><option>Large pile</option><option>Mixed</option><option>Unknown</option>
+            </select>
+          </label>
+        </div>
+
+        <label for="note">Quick note — optional</label>
+        <textarea id="note" maxlength="500" placeholder="Example: Heavier pieces are underneath. Similar material is behind the building."></textarea>
+      </div>
+
+      <div class="card-like upload-step">
+        <p class="step-label">5 · Confirm location</p>
+        <h2>Move the pin onto the material</h2>
+        <p class="helper">The initial pin uses the phone or photo location. Drag the pin, or tap the map, if the material is several feet away from where the photo was taken.</p>
+        <div id="collectorMap" role="application" aria-label="Confirm material location map"></div>
+        <div id="coordinateStatus" class="metadata">No material position yet.</div>
+      </div>
+
+      <div class="save-panel">
+        <button id="saveRecord" class="primary-button" type="button">Upload and save material record</button>
+        <div id="saveStatus" class="status-box" aria-live="polite">Complete the form, then save.</div>
       </div>
     </section>
 
-    <section class="collector-map-panel">
-      <div id="collectorMap" role="application" aria-label="Photo and boundary editing map"></div>
-      <p class="map-note">Photo pins begin at the camera GPS coordinate. Drag each pin onto the photographed material when needed.</p>
-    </section>
-
-    <section class="records-panel">
+    <aside class="manage-panel">
       <div class="panel-heading">
         <div>
-          <p class="step-label">4 · Add yard knowledge</p>
-          <h2>Photo records</h2>
+          <p class="step-label">Current records</p>
+          <h2>Manage the test inventory</h2>
         </div>
-        <span id="recordCount" class="count-badge">0</span>
+        <button id="refreshRecords" class="text-button" type="button">Refresh</button>
       </div>
-      <div id="records" class="record-list">
-        <p class="empty-state">Imported photos will appear here.</p>
+      <p class="helper">Replacing a nearby item hides the old record from public search but keeps it as history. Delete removes the current photo from storage and hides its record.</p>
+      <div id="manageRecords" class="manage-list">
+        <p class="empty-state">Loading current records…</p>
       </div>
-    </section>
+    </aside>
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
-  <script src="js/collector.js"></script>
+  <script src="js/supabase-config.js?v=1"></script>
+  <script type="module" src="js/collector.js?v=4"></script>
 </body>
 </html>
