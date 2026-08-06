@@ -6,57 +6,66 @@
   <meta name="theme-color" content="#17202a">
   <title>Page Steel Material Search</title>
   <link rel="stylesheet" href="css/styles.css?v=10">
+  <link rel="stylesheet" href="css/simple-ui.css?v=11">
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header simple-header">
     <div>
-      <p class="eyebrow">Working proof of concept</p>
-      <h1>Page Steel Material Search</h1>
-      <p>Choose visually tracked scrap or quantity-controlled inventory.</p>
+      <p class="eyebrow">Page Steel</p>
+      <h1>Material Search</h1>
+      <p>Choose the job you need to do.</p>
     </div>
-    <nav class="header-nav">
-      <a class="secondary-button" href="collect.html?v=10">Update scrap photos</a>
-      <a class="secondary-button" href="inventory-add.html?v=10">Add inventory</a>
-      <a class="secondary-button" href="admin.html?v=10">Admin alerts <span id="adminAlertCount" class="count-badge">0</span></a>
-    </nav>
+    <a class="secondary-button" href="admin.html?v=11">
+      Admin alerts <span id="adminAlertCount" class="count-badge">0</span>
+    </a>
   </header>
 
-  <main class="mode-shell">
-    <section class="mode-intro">
-      <p class="step-label">Choose a search workflow</p>
-      <h2>What type of material are you looking for?</h2>
-      <p>Scrap is maintained by current photographs. Tracked inventory is maintained by required quantity transactions.</p>
+  <main class="simple-home">
+    <section class="task-section scrap-task-section">
+      <div class="task-heading">
+        <span class="task-number">1</span>
+        <div>
+          <h2>Scrap or untracked material</h2>
+          <p>Use a photo to find where loose material was last seen.</p>
+        </div>
+      </div>
+
+      <div class="task-actions">
+        <a class="big-task-button primary-task" href="scrap.html?v=11">
+          <strong>Find scrap</strong>
+          <span>Search photos and map locations</span>
+        </a>
+        <a class="big-task-button" href="collect.html?v=11">
+          <strong>Add or replace scrap photo</strong>
+          <span>Take a current photo and save its location</span>
+        </a>
+      </div>
     </section>
 
-    <section class="mode-card-grid">
-      <a class="mode-card" href="scrap.html?v=10">
-        <span class="mode-kicker">Visual location search</span>
-        <h2>Scrap or untracked material</h2>
-        <p>Find material by appearance, ordinary name, photo, and last known yard location.</p>
-        <ul>
-          <li>No quantity transaction is required.</li>
-          <li>Photos older than 90 days create an admin task.</li>
-          <li>No-result searches are logged for review.</li>
-        </ul>
-        <span class="primary-button mode-action">Search scrap</span>
-      </a>
+    <section class="task-section inventory-task-section">
+      <div class="task-heading">
+        <span class="task-number">2</span>
+        <div>
+          <h2>Tracked inventory</h2>
+          <p>Use an inventory number, exact quantity, and assigned location.</p>
+        </div>
+      </div>
 
-      <a class="mode-card inventory-mode-card" href="inventory.html?v=10">
-        <span class="mode-kicker">Quantity-controlled search</span>
-        <h2>Tracked inventory</h2>
-        <p>Find material with an inventory number, exact quantity, unit, and assigned location.</p>
-        <ul>
-          <li>The employee chooses the intended action.</li>
-          <li>Opening a record immediately creates a pending task.</li>
-          <li>Completing the transaction closes the alert.</li>
-        </ul>
-        <span class="primary-button mode-action">Search inventory</span>
-      </a>
+      <div class="task-actions">
+        <a class="big-task-button primary-task inventory-primary" href="inventory.html?v=11">
+          <strong>Find or use inventory</strong>
+          <span>Search, remove, receive, move, or count</span>
+        </a>
+        <a class="big-task-button inventory-photo-button" href="inventory-add.html?v=11">
+          <strong>Add inventory and photo</strong>
+          <span>Create or replace a tracked inventory record</span>
+        </a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p><strong>Demo alert:</strong> alerts appear in the admin dashboard. Email or text delivery can be added later.</p>
+    <p>Scrap is maintained by current photos. Inventory is maintained by required quantity updates.</p>
   </footer>
 
   <script src="js/supabase-config.js?v=1"></script>

@@ -12,18 +12,12 @@ const state = {
   previewUrl: null,
   latitude: null,
   longitude: null,
-  saving: false
+  saving: false,
+  existingRecord: null,
+  lookupTimer: null
 };
 
 const $ = id => document.getElementById(id);
-
-const norm = value => (value ?? '')
-  .toString()
-  .toLowerCase()
-  .replace(/[-_/]/g, ' ')
-  .replace(/[^a-z0-9\s]/g, ' ')
-  .replace(/\s+/g, ' ')
-  .trim();
 
 function getClient() {
   const config = window.PAGE_STEEL_SUPABASE;
@@ -41,14 +35,54 @@ async function fetchJson(url) {
   return response.json();
 }
 
-function buildSelects() {
-  state.taxonomy.materials.forEach(value => $('material').add(new Option(value, value)));
-  state.taxonomy.forms.forEach(value => $('form').add(new Option(value, value)));
+async function load() {
+  state.supabase = getClient();
+  [state.site, state.taxonomy] = await Promise.all([
+    fetchJson('data/site.json'),
+    fetchJson('data/taxonomy.json')
+  ]);
+
+  state.taxonomy.materials.forEach(value => {
+    $('material').add(new Option(value, value));
+  });
+  state.taxonomy.forms.forEach(value => {
+    $('profile').add(new Option(value, value));
+  });
+
+  initMap();
+  bind();
+
+  $('employeeName').value =
+    localStorage.getItem('pageSteelEmployeeName') || '';
+
+  const requestedNumber = new URLSearchParams(location.search).get('inventory');
+  if (requestedNumber) {
+    $('inventoryNumber').value = requestedNumber.toUpperCase();
+    await loadExistingInventory();
+  }
 }
 
-function initMap(containerId = 'map') {
+function bind() {
+  $('employeeName').addEventListener('input', event => {
+    localStorage.setItem('pageSteelEmployeeName', event.target.value.trim());
+  });
+
+  $('inventoryNumber').addEventListener('input', event => {
+    event.target.value = event.target.value.toUpperCase();
+    state.existingRecord = null;
+    clearTimeout(state.lookupTimer);
+    state.lookupTimer = setTimeout(loadExistingInventory, 550);
+  });
+  $('inventoryNumber').addEventListener('blur', loadExistingInventory);
+
+  $('cameraInput').addEventListener('change', handlePhoto);
+  $('photoInput').addEventListener('change', handlePhoto);
+  $('saveInventory').addEventListener('click', saveInventory);
+}
+
+function initMap() {
   const center = state.site.center;
-  state.map = L.map(containerId, { zoomControl: true }).setView(
+  state.map = L.map('inventoryMap', { zoomControl: true }).setView(
     [center.latitude, center.longitude],
     state.site.zoom || 17
   );
@@ -79,118 +113,66 @@ function initMap(containerId = 'map') {
     ).addTo(state.map);
     state.map.fitBounds(state.boundary.getBounds(), { padding: [20, 20] });
   }
-}
-
-function scoreText(text, material, form, query) {
-  const normalized = norm(text);
-  const terms = norm(query).split(' ').filter(Boolean);
-  let score = 0;
-  let max = 0;
-
-  if (material) {
-    max += 40;
-    if (normalized.includes(norm(material))) score += 40;
-  }
-
-  if (form) {
-    max += 40;
-    if (normalized.includes(norm(form))) score += 40;
-  }
-
-  terms.forEach(term => {
-    max += 8;
-    if (normalized.includes(term)) score += 8;
-  });
-
-  if (!material && !form && !terms.length) return 0;
-  return Math.round((score / Math.max(max, 1)) * 100);
-}
-
-function clearMarkers() {
-  state.markers.forEach(marker => marker.remove());
-  state.markers.clear();
-}
-
-function fitMatches(matches) {
-  const markers = matches.map(record => state.markers.get(record.id)).filter(Boolean);
-  if (!markers.length) return;
-  const group = L.featureGroup(markers);
-  state.map.fitBounds(group.getBounds(), { padding: [40, 40], maxZoom: 19 });
-}
-
-function daysOld(value) {
-  if (!value) return null;
-  const time = new Date(value).getTime();
-  if (!Number.isFinite(time)) return null;
-  return Math.max(0, Math.floor((Date.now() - time) / 86400000));
-}
-
-function formatDate(value) {
-  if (!value) return 'unknown';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString();
-}
-
-function formatDateTime(value) {
-  if (!value) return 'unknown';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString();
-}
-
-function esc(value) {
-  return (value ?? '').toString().replace(/[&<>'"]/g, character => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;'
-  })[character]);
-}
-
-async function load() {
-  state.supabase = getClient();
-
-  [state.site, state.taxonomy] = await Promise.all([
-    fetchJson('data/site.json'),
-    fetchJson('data/taxonomy.json')
-  ]);
-
-  state.taxonomy.materials.forEach(value => {
-    $('material').add(new Option(value, value));
-  });
-
-  state.taxonomy.forms.forEach(value => {
-    $('profile').add(new Option(value, value));
-  });
-
-  initMap('inventoryMap');
 
   state.map.on('click', event => {
     setPosition(event.latlng.lat, event.latlng.lng);
   });
+}
 
-  $('employeeName').value =
-    localStorage.getItem('pageSteelEmployeeName') || '';
+async function loadExistingInventory() {
+  const inventoryNumber = $('inventoryNumber').value.trim().toUpperCase();
 
-  $('employeeName').addEventListener('input', event => {
-    localStorage.setItem(
-      'pageSteelEmployeeName',
-      event.target.value.trim()
-    );
-  });
+  if (!inventoryNumber) {
+    state.existingRecord = null;
+    setLookupStatus('Enter an inventory number. Existing records will load automatically.');
+    return;
+  }
 
-  $('photoInput').addEventListener('change', handlePhoto);
-  $('saveInventory').addEventListener('click', saveInventory);
+  setLookupStatus('Checking for an existing record…');
+
+  const { data, error } = await state.supabase
+    .from('inventory_records')
+    .select('*')
+    .eq('inventory_number', inventoryNumber)
+    .maybeSingle();
+
+  if (error) {
+    setLookupStatus(error.message, true);
+    return;
+  }
+
+  if (!data) {
+    state.existingRecord = null;
+    setLookupStatus('New inventory number. Complete the form to create it.');
+    return;
+  }
+
+  state.existingRecord = data;
+  $('material').value = data.material || '';
+  $('profile').value = data.profile || '';
+  $('grade').value = data.grade || '';
+  $('sizeDescription').value = data.size_description || '';
+  $('exactQuantity').value = data.exact_quantity ?? '';
+  $('quantityUnit').value = data.quantity_unit || '';
+  $('locationCode').value = data.location_code || '';
+
+  const latitude = Number(data.latitude);
+  const longitude = Number(data.longitude);
+  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+    setPosition(latitude, longitude);
+  }
+
+  setLookupStatus(
+    `Existing record loaded: ${data.inventory_number}. Add a new current photo, check the quantity and location, then save.`
+  );
 }
 
 async function handlePhoto(event) {
   const file = event.target.files?.[0];
-
   if (!file) return;
 
   state.file = file;
-  $('photoStatus').textContent =
-    'Reading the photo and preparing the upload…';
+  $('photoStatus').textContent = 'Preparing photo…';
 
   if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
 
@@ -206,7 +188,6 @@ async function handlePhoto(event) {
   $('photoPreview').classList.remove('hidden');
 
   let exif = {};
-
   try {
     exif = await window.exifr.parse(file, {
       gps: true,
@@ -221,28 +202,22 @@ async function handlePhoto(event) {
   const exifLatitude = Number(exif.latitude);
   const exifLongitude = Number(exif.longitude);
 
-  if (
-    Number.isFinite(exifLatitude) &&
-    Number.isFinite(exifLongitude)
-  ) {
+  if (Number.isFinite(exifLatitude) && Number.isFinite(exifLongitude)) {
     setPosition(exifLatitude, exifLongitude);
-    $('photoStatus').textContent =
-      'Photo ready. Using GPS stored in the photo.';
+    $('photoStatus').textContent = 'Photo selected. Using the GPS saved in the photo.';
     return;
   }
 
-  $('photoStatus').textContent =
-    'Photo ready. No photo GPS found; requesting the phone location…';
-
+  $('photoStatus').textContent = 'Photo selected. Checking the phone location…';
   const phone = await getPhonePosition();
 
   if (phone) {
     setPosition(phone.latitude, phone.longitude);
     $('photoStatus').textContent =
-      `Photo ready. Using phone GPS with approximately ±${Math.round(phone.accuracy)} m accuracy.`;
+      `Photo selected. Phone location accuracy is approximately ±${Math.round(phone.accuracy)} m.`;
   } else {
     $('photoStatus').textContent =
-      'Photo ready, but no GPS was available. Tap the map to set the inventory location.';
+      'Photo selected. No GPS was available. Tap the map to place the inventory.';
   }
 }
 
@@ -260,11 +235,7 @@ function getPhonePosition() {
         accuracy: position.coords.accuracy
       }),
       () => resolve(null),
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0
-      }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   });
 }
@@ -276,10 +247,8 @@ function setPosition(latitude, longitude) {
   state.longitude = longitude;
 
   if (!state.marker) {
-    state.marker = L.marker(
-      [latitude, longitude],
-      { draggable: true }
-    ).addTo(state.map);
+    state.marker = L.marker([latitude, longitude], { draggable: true })
+      .addTo(state.map);
 
     state.marker.on('dragend', () => {
       const point = state.marker.getLatLng();
@@ -296,39 +265,32 @@ function setPosition(latitude, longitude) {
 }
 
 function updateCoordinateStatus() {
-  if (
-    !Number.isFinite(state.latitude) ||
-    !Number.isFinite(state.longitude)
-  ) {
+  if (!Number.isFinite(state.latitude) || !Number.isFinite(state.longitude)) {
     $('coordinateStatus').textContent = 'No location selected.';
     return;
   }
 
   $('coordinateStatus').textContent =
-    `Inventory pin: ${state.latitude.toFixed(6)}, ${state.longitude.toFixed(6)}`;
+    `Map location confirmed: ${state.latitude.toFixed(6)}, ${state.longitude.toFixed(6)}`;
 }
 
 function validate() {
-  if (!$('employeeName').value.trim()) return 'Enter the employee name.';
-  if (!$('inventoryNumber').value.trim()) return 'Enter the inventory number.';
-  if (!$('material').value) return 'Select the material.';
-  if (!$('profile').value) return 'Select the profile or form.';
+  if (!$('employeeName').value.trim()) return 'Step 1: Enter the employee name.';
+  if (!$('inventoryNumber').value.trim()) return 'Step 1: Enter the inventory number.';
+  if (!$('material').value) return 'Step 2: Select the material.';
+  if (!$('profile').value) return 'Step 2: Select the profile or form.';
 
   const quantity = Number($('exactQuantity').value);
-
   if (!Number.isFinite(quantity) || quantity < 0) {
-    return 'Enter a valid non-negative quantity.';
+    return 'Step 3: Enter a valid quantity.';
   }
 
-  if (!$('quantityUnit').value) return 'Select the quantity unit.';
-  if (!$('locationCode').value.trim()) return 'Enter the location code.';
-  if (!state.blob) return 'Take or select a current inventory photo.';
+  if (!$('quantityUnit').value) return 'Step 3: Select the quantity unit.';
+  if (!$('locationCode').value.trim()) return 'Step 3: Enter the location code.';
+  if (!state.blob) return 'Step 4: Take or choose a current inventory photo.';
 
-  if (
-    !Number.isFinite(state.latitude) ||
-    !Number.isFinite(state.longitude)
-  ) {
-    return 'Confirm the inventory location on the map.';
+  if (!Number.isFinite(state.latitude) || !Number.isFinite(state.longitude)) {
+    return 'Step 4: Confirm the inventory location on the map.';
   }
 
   return null;
@@ -338,7 +300,6 @@ async function saveInventory() {
   if (state.saving) return;
 
   const validationError = validate();
-
   if (validationError) {
     setSaveStatus(validationError, true);
     return;
@@ -346,6 +307,7 @@ async function saveInventory() {
 
   state.saving = true;
   $('saveInventory').disabled = true;
+  $('saveInventory').textContent = 'Saving…';
 
   try {
     const employeeName = $('employeeName').value.trim();
@@ -353,33 +315,31 @@ async function saveInventory() {
     const material = $('material').value;
     const profile = $('profile').value;
     const grade = $('grade').value.trim() || null;
-    const sizeDescription =
-      $('sizeDescription').value.trim() || null;
+    const sizeDescription = $('sizeDescription').value.trim() || null;
     const exactQuantity = Number($('exactQuantity').value);
     const quantityUnit = $('quantityUnit').value;
     const locationCode = $('locationCode').value.trim().toUpperCase();
     const now = new Date().toISOString();
 
-    setSaveStatus('Checking for an existing inventory number…');
+    let existing = state.existingRecord;
+    if (!existing || existing.inventory_number !== inventoryNumber) {
+      const result = await state.supabase
+        .from('inventory_records')
+        .select('*')
+        .eq('inventory_number', inventoryNumber)
+        .maybeSingle();
 
-    const { data: existing, error: lookupError } = await state.supabase
-      .from('inventory_records')
-      .select('*')
-      .eq('inventory_number', inventoryNumber)
-      .maybeSingle();
-
-    if (lookupError) throw lookupError;
+      if (result.error) throw result.error;
+      existing = result.data;
+    }
 
     const id = existing?.id || makeUuid();
-    const safeNumber = inventoryNumber
-      .toLowerCase()
+    const safeNumber = inventoryNumber.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '');
+    const path = `inventory/${safeNumber}/${Date.now()}-${makeUuid()}.jpg`;
 
-    const path =
-      `inventory/${safeNumber}/${Date.now()}-${makeUuid()}.jpg`;
-
-    setSaveStatus('Uploading the current inventory photo…');
+    setSaveStatus('Uploading the current photo…');
 
     const { error: uploadError } = await state.supabase.storage
       .from('material-photos')
@@ -420,39 +380,27 @@ async function saveInventory() {
     };
 
     let saveError;
-
     if (existing) {
       const result = await state.supabase
         .from('inventory_records')
         .update(row)
         .eq('id', existing.id);
-
       saveError = result.error;
     } else {
       const result = await state.supabase
         .from('inventory_records')
-        .insert({
-          id,
-          ...row,
-          created_at: now
-        });
-
+        .insert({ id, ...row, created_at: now });
       saveError = result.error;
     }
 
     if (saveError) {
-      await state.supabase.storage
-        .from('material-photos')
-        .remove([path]);
-
+      await state.supabase.storage.from('material-photos').remove([path]);
       throw saveError;
     }
 
-    const before = existing
-      ? Number(existing.exact_quantity)
-      : 0;
+    const before = existing ? Number(existing.exact_quantity) : 0;
 
-    await state.supabase
+    const { error: transactionError } = await state.supabase
       .from('inventory_transactions')
       .insert({
         inventory_record_id: id,
@@ -465,9 +413,23 @@ async function saveInventory() {
         from_location: existing?.location_code || null,
         to_location: locationCode,
         note: existing
-          ? 'Inventory record replaced through the inventory setup page.'
-          : 'Initial inventory count.'
+          ? 'Inventory record and photo replaced through the inventory setup page.'
+          : 'Initial inventory record and count.'
       });
+
+    if (transactionError) console.warn(transactionError);
+
+    await state.supabase
+      .from('review_tasks')
+      .update({
+        status: 'completed',
+        completed_at: now,
+        completed_by: employeeName,
+        updated_at: now
+      })
+      .eq('record_type', 'inventory')
+      .eq('record_id', id)
+      .eq('status', 'open');
 
     if (existing?.image_path) {
       await state.supabase.storage
@@ -479,8 +441,8 @@ async function saveInventory() {
 
     setSaveStatus(
       existing
-        ? `Updated ${inventoryNumber} successfully.`
-        : `Created ${inventoryNumber} successfully.`
+        ? `Saved. ${inventoryNumber} was updated and its open alerts were resolved.`
+        : `Saved. ${inventoryNumber} was created successfully.`
     );
 
     resetForm();
@@ -490,6 +452,7 @@ async function saveInventory() {
   } finally {
     state.saving = false;
     $('saveInventory').disabled = false;
+    $('saveInventory').textContent = 'Save inventory record';
   }
 }
 
@@ -502,18 +465,36 @@ function resetForm() {
   $('exactQuantity').value = '';
   $('quantityUnit').value = '';
   $('locationCode').value = '';
+  $('cameraInput').value = '';
   $('photoInput').value = '';
   $('photoPreview').src = '';
   $('photoPreview').classList.add('hidden');
   $('photoStatus').textContent = 'No photo selected.';
+  setLookupStatus('Enter an inventory number. Existing records will load automatically.');
 
-  if (state.previewUrl) {
-    URL.revokeObjectURL(state.previewUrl);
-  }
+  if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
 
   state.file = null;
   state.blob = null;
   state.previewUrl = null;
+  state.existingRecord = null;
+  state.latitude = null;
+  state.longitude = null;
+
+  if (state.marker) {
+    state.marker.remove();
+    state.marker = null;
+  }
+
+  updateCoordinateStatus();
+  if (state.boundary) {
+    state.map.fitBounds(state.boundary.getBounds(), { padding: [20, 20] });
+  }
+}
+
+function setLookupStatus(message, isError = false) {
+  $('lookupStatus').textContent = message;
+  $('lookupStatus').classList.toggle('error-status', isError);
 }
 
 function setSaveStatus(message, isError = false) {
@@ -525,37 +506,25 @@ async function resizeImage(file, maxDimension, quality) {
   let image;
 
   try {
-    image = await createImageBitmap(file, {
-      imageOrientation: 'from-image'
-    });
+    image = await createImageBitmap(file, { imageOrientation: 'from-image' });
   } catch {
     image = await createImageBitmap(file);
   }
 
-  const scale = Math.min(
-    1,
-    maxDimension / Math.max(image.width, image.height)
-  );
-
+  const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
   const width = Math.max(1, Math.round(image.width * scale));
   const height = Math.max(1, Math.round(image.height * scale));
 
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-
-  canvas
-    .getContext('2d', { alpha: false })
+  canvas.getContext('2d', { alpha: false })
     .drawImage(image, 0, 0, width, height);
-
   image.close();
 
   return new Promise((resolve, reject) => {
     canvas.toBlob(
-      blob => {
-        if (blob) resolve(blob);
-        else reject(new Error('Could not resize the photo.'));
-      },
+      blob => blob ? resolve(blob) : reject(new Error('Could not resize the photo.')),
       'image/jpeg',
       quality
     );
@@ -565,18 +534,11 @@ async function resizeImage(file, maxDimension, quality) {
 function makeUuid() {
   if (crypto.randomUUID) return crypto.randomUUID();
 
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-    .replace(/[xy]/g, character => {
-      const random =
-        crypto.getRandomValues(new Uint8Array(1))[0] & 15;
-
-      const value =
-        character === 'x'
-          ? random
-          : (random & 3) | 8;
-
-      return value.toString(16);
-    });
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, character => {
+    const random = crypto.getRandomValues(new Uint8Array(1))[0] & 15;
+    const value = character === 'x' ? random : (random & 3) | 8;
+    return value.toString(16);
+  });
 }
 
 load().catch(error => {

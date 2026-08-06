@@ -1,0 +1,383 @@
+/* Simplified user interface — version 11 */
+
+.simple-header {
+  align-items: center;
+}
+
+.simple-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.simple-home,
+.simple-form-shell,
+.simple-admin-shell {
+  width: min(980px, calc(100% - 28px));
+  margin: 24px auto 40px;
+}
+
+.task-section {
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.task-heading,
+.simple-step-title {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.task-heading h2,
+.simple-step-title h2 {
+  margin: 0 0 5px;
+  font-size: 1.3rem;
+}
+
+.task-heading p,
+.simple-step-title p,
+.simple-section-heading p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.task-number,
+.simple-step-title > span {
+  display: flex;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 900;
+}
+
+.task-actions,
+.photo-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.big-task-button,
+.photo-choice {
+  display: flex;
+  min-height: 92px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 18px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.big-task-button strong,
+.photo-choice strong {
+  font-size: 1.05rem;
+}
+
+.big-task-button span,
+.photo-choice span {
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+.primary-task,
+.primary-photo-choice {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.primary-task span,
+.primary-photo-choice span {
+  color: rgba(255,255,255,.82);
+}
+
+.inventory-primary {
+  border-color: #225f9e;
+  background: #225f9e;
+}
+
+.inventory-photo-button {
+  border-color: #225f9e;
+}
+
+.simple-step-card,
+.admin-control-card,
+.admin-tab-panel {
+  padding: 22px;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.simple-step-card .field-grid {
+  margin-top: 12px;
+}
+
+.required-label {
+  display: inline-block;
+  margin-left: 5px;
+  color: var(--accent);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.plain-status {
+  margin-top: 12px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.photo-step-card {
+  border: 2px solid #225f9e;
+}
+
+.hidden-file-input {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+.location-heading {
+  margin-top: 24px;
+}
+
+.location-heading h3 {
+  margin-bottom: 4px;
+}
+
+.location-heading p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.simple-save-card {
+  position: sticky;
+  bottom: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 -8px 24px rgba(22,32,42,.12);
+  z-index: 500;
+}
+
+.save-large-button {
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.save-large-button:disabled {
+  opacity: .55;
+}
+
+.simple-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.metric-tab {
+  min-height: 86px;
+  padding: 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.metric-tab strong,
+.metric-tab span {
+  display: block;
+}
+
+.metric-tab strong {
+  font-size: 1.65rem;
+}
+
+.metric-tab span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.metric-tab.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.admin-toolbar,
+.simple-section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-toolbar .plain-status {
+  flex: 1;
+  margin: 0;
+}
+
+.simple-alert-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.simple-alert-card {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-left: 5px solid #8b97a5;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.simple-alert-card.high,
+.simple-alert-card.urgent {
+  border-left-color: var(--danger);
+}
+
+.simple-alert-card.completed,
+.simple-alert-card.dismissed {
+  border-left-color: var(--success);
+  background: #f7faf8;
+}
+
+.alert-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.alert-topline h3 {
+  margin: 3px 0 0;
+}
+
+.alert-type {
+  margin: 0;
+  color: var(--accent);
+  font-size: .76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.alert-meta {
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.45;
+}
+
+.alert-description {
+  margin: 12px 0;
+  line-height: 1.45;
+}
+
+.alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.alert-actions .primary-button,
+.alert-actions .secondary-button,
+.alert-actions .text-button {
+  width: auto;
+  margin: 0;
+}
+
+.alert-details {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.alert-details summary,
+.secondary-admin-section summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.secondary-admin-section {
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--soft);
+}
+
+.search-history-card {
+  border-left-color: #225f9e;
+}
+
+@media (max-width: 700px) {
+  .task-actions,
+  .photo-choice-grid,
+  .simple-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .simple-header,
+  .admin-toolbar,
+  .simple-section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .simple-nav {
+    width: 100%;
+  }
+
+  .simple-nav .secondary-button {
+    flex: 1 1 auto;
+  }
+
+  .simple-step-card,
+  .admin-control-card,
+  .admin-tab-panel,
+  .task-section {
+    padding: 17px;
+  }
+
+  .simple-save-card {
+    border-radius: 0;
+    margin: 0 -14px;
+  }
+}

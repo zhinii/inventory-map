@@ -4,49 +4,85 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#17202a">
-  <title>Add Tracked Inventory · Page Steel</title>
+  <title>Add Inventory and Photo · Page Steel</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="css/styles.css?v=10">
+  <link rel="stylesheet" href="css/simple-ui.css?v=11">
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header simple-header">
     <div>
-      <p class="eyebrow">Tracked inventory setup</p>
-      <h1>Add or replace a tracked inventory record</h1>
-      <p>Inventory numbers are permanent. Reusing an existing number updates that record.</p>
+      <p class="eyebrow">Tracked inventory</p>
+      <h1>Add inventory and photo</h1>
+      <p>Complete each numbered section, then save.</p>
     </div>
-    <nav class="header-nav">
-      <a class="secondary-button" href="index.html?v=10">Material search</a>
-      <a class="secondary-button" href="inventory.html?v=10">Search inventory</a>
-      <a class="secondary-button" href="admin.html?v=10">Admin alerts</a>
+    <nav class="simple-nav">
+      <a class="secondary-button" href="index.html?v=11">Home</a>
+      <a class="secondary-button" href="inventory.html?v=11">Find inventory</a>
+      <a class="secondary-button" href="admin.html?v=11">Admin</a>
     </nav>
   </header>
 
-  <main class="inventory-add-shell">
-    <section class="card-like inventory-add-form">
+  <main class="simple-form-shell">
+    <section class="simple-step-card">
+      <div class="simple-step-title">
+        <span>1</span>
+        <div>
+          <h2>Who and which inventory record?</h2>
+          <p>Use the same inventory number when replacing an existing record.</p>
+        </div>
+      </div>
+
       <div class="field-grid">
-        <label>Employee name
+        <label>Employee name <b class="required-label">Required</b>
           <input id="employeeName" type="text" autocomplete="name" placeholder="First and last name">
         </label>
-        <label>Inventory number
-          <input id="inventoryNumber" type="text" placeholder="Example: PS-000421">
+        <label>Inventory number <b class="required-label">Required</b>
+          <input id="inventoryNumber" type="text" autocomplete="off" placeholder="Example: PS-000421">
         </label>
-        <label>Material
+      </div>
+      <div id="lookupStatus" class="plain-status">Enter an inventory number. Existing records will load automatically.</div>
+    </section>
+
+    <section class="simple-step-card">
+      <div class="simple-step-title">
+        <span>2</span>
+        <div>
+          <h2>Describe the material</h2>
+          <p>Select the basic material and enter only the useful identifying details.</p>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <label>Material <b class="required-label">Required</b>
           <select id="material"><option value="">Select material</option></select>
         </label>
-        <label>Profile or form
+        <label>Profile or form <b class="required-label">Required</b>
           <select id="profile"><option value="">Select profile</option></select>
         </label>
         <label>Grade or alloy
           <input id="grade" type="text" placeholder="Example: A500">
         </label>
-        <label>Size description
+        <label>Size and standard length
           <input id="sizeDescription" type="text" placeholder="Example: 2 × 2 × 0.125 in, 20 ft">
         </label>
-        <label>Exact quantity
-          <input id="exactQuantity" type="number" min="0" step="0.001" inputmode="decimal">
+      </div>
+    </section>
+
+    <section class="simple-step-card">
+      <div class="simple-step-title">
+        <span>3</span>
+        <div>
+          <h2>Enter the quantity and location</h2>
+          <p>Quantity must include a unit. Location code identifies the rack, bin, or pile.</p>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <label>Exact quantity <b class="required-label">Required</b>
+          <input id="exactQuantity" type="number" min="0" step="0.001" inputmode="decimal" placeholder="Example: 36">
         </label>
-        <label>Quantity unit
+        <label>Unit <b class="required-label">Required</b>
           <select id="quantityUnit">
             <option value="">Select unit</option>
             <option>Pieces</option><option>Sheets</option><option>Plates</option>
@@ -55,29 +91,54 @@
             <option>Pallets</option><option>Bins</option>
           </select>
         </label>
-        <label>Location code
-          <input id="locationCode" type="text" placeholder="Example: WY-R05-L2">
+        <label>Location code <b class="required-label">Required</b>
+          <input id="locationCode" type="text" autocomplete="off" placeholder="Example: WY-R05-L2">
         </label>
       </div>
+    </section>
 
-      <label for="photoInput">Current inventory photo</label>
-      <input id="photoInput" type="file" accept="image/*">
+    <section class="simple-step-card photo-step-card">
+      <div class="simple-step-title">
+        <span>4</span>
+        <div>
+          <h2>Add a current inventory photo</h2>
+          <p>A new photo is required when creating or replacing the record.</p>
+        </div>
+      </div>
+
+      <div class="photo-choice-grid">
+        <label class="photo-choice primary-photo-choice" for="cameraInput">
+          <strong>Take a new photo</strong>
+          <span>Open the rear camera</span>
+        </label>
+        <label class="photo-choice" for="photoInput">
+          <strong>Choose a saved photo</strong>
+          <span>Select from this phone</span>
+        </label>
+      </div>
+      <input id="cameraInput" class="hidden-file-input" type="file" accept="image/*" capture="environment">
+      <input id="photoInput" class="hidden-file-input" type="file" accept="image/*">
+
       <img id="photoPreview" class="upload-preview hidden" alt="Selected inventory photograph">
-      <div id="photoStatus" class="status-box">No photo selected.</div>
+      <div id="photoStatus" class="plain-status">No photo selected.</div>
 
-      <h2>Confirm location</h2>
-      <p class="helper">Photo GPS is used first when available. Phone GPS is the fallback. Tap the map to adjust the pin.</p>
+      <div class="location-heading">
+        <h3>Confirm the map location</h3>
+        <p>Photo GPS is used first. Tap the map or drag the pin if it is not exact.</p>
+      </div>
       <div id="inventoryMap" role="application" aria-label="Inventory location map"></div>
       <div id="coordinateStatus" class="metadata">No location selected.</div>
+    </section>
 
-      <button id="saveInventory" class="primary-button" type="button">Save tracked inventory</button>
-      <div id="saveStatus" class="status-box">Complete all required fields.</div>
+    <section class="simple-save-card">
+      <button id="saveInventory" class="save-large-button" type="button">Save inventory record</button>
+      <div id="saveStatus" class="status-box" aria-live="polite">Complete the required fields above.</div>
     </section>
   </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
   <script src="js/supabase-config.js?v=1"></script>
-  <script type="module" src="js/inventory-add.js?v=10"></script>
+  <script type="module" src="js/inventory-add.js?v=11"></script>
 </body>
 </html>
