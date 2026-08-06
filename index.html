@@ -4,77 +4,62 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#17202a">
-  <title>Page Steel Material Inventory Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=8">
+  <title>Page Steel Material Search</title>
+  <link rel="stylesheet" href="css/styles.css?v=10">
 </head>
 <body>
   <header class="site-header">
     <div>
       <p class="eyebrow">Working proof of concept</p>
-      <h1>Page Steel Material Inventory Map</h1>
-      <p>Search the yard’s captured knowledge and reveal likely places to look.</p>
+      <h1>Page Steel Material Search</h1>
+      <p>Choose visually tracked scrap or quantity-controlled inventory.</p>
     </div>
-    <a class="secondary-button header-action" href="collect.html?v=8">Add or update material photos</a>
+    <nav class="header-nav">
+      <a class="secondary-button" href="collect.html?v=10">Update scrap photos</a>
+      <a class="secondary-button" href="inventory-add.html?v=10">Add inventory</a>
+      <a class="secondary-button" href="admin.html?v=10">Admin alerts <span id="adminAlertCount" class="count-badge">0</span></a>
+    </nav>
   </header>
 
-  <main class="app-shell">
-    <section class="search-panel" aria-labelledby="search-heading">
-      <div class="panel-heading">
-        <div>
-          <p class="step-label">1 · Describe the material</p>
-          <h2 id="search-heading">What are you looking for?</h2>
-        </div>
-        <button id="clearSearch" class="text-button" type="button">Clear</button>
-      </div>
-
-      <label for="material">Material</label>
-      <select id="material">
-        <option value="">Any material</option>
-      </select>
-
-      <label for="form">Profile or form</label>
-      <select id="form">
-        <option value="">Any profile</option>
-      </select>
-
-      <label for="query">Description or ordinary name</label>
-      <input id="query" type="search" placeholder="Example: rusted square tubing, 4-inch angle, galvanized pipe">
-      <p class="helper">Search checks the selected labels, ordinary names, notes, condition, size, length and quantity.</p>
-
-      <button id="searchButton" class="primary-button" type="button">Find likely locations</button>
-      <div id="status" class="status-box" aria-live="polite">Connecting to the live inventory…</div>
-
-      <section class="results-section" aria-labelledby="results-heading">
-        <div class="panel-heading compact">
-          <h2 id="results-heading">Likely locations</h2>
-          <span id="resultCount" class="count-badge">0</span>
-        </div>
-        <div id="results" class="results-list">
-          <p class="empty-state">Search results will appear here with photos and directions.</p>
-        </div>
-      </section>
+  <main class="mode-shell">
+    <section class="mode-intro">
+      <p class="step-label">Choose a search workflow</p>
+      <h2>What type of material are you looking for?</h2>
+      <p>Scrap is maintained by current photographs. Tracked inventory is maintained by required quantity transactions.</p>
     </section>
 
-    <section class="map-panel" aria-labelledby="map-heading">
-      <div class="map-toolbar">
-        <div>
-          <p class="step-label">2 · Review matches</p>
-          <h2 id="map-heading">Page Steel yard</h2>
-        </div>
-        <span class="privacy-note">Pins appear only after a search</span>
-      </div>
-      <div id="map" role="application" aria-label="Interactive material location map"></div>
-      <p class="map-note">The yellow outline shows the traced Page Steel site boundary.</p>
+    <section class="mode-card-grid">
+      <a class="mode-card" href="scrap.html?v=10">
+        <span class="mode-kicker">Visual location search</span>
+        <h2>Scrap or untracked material</h2>
+        <p>Find material by appearance, ordinary name, photo, and last known yard location.</p>
+        <ul>
+          <li>No quantity transaction is required.</li>
+          <li>Photos older than 90 days create an admin task.</li>
+          <li>No-result searches are logged for review.</li>
+        </ul>
+        <span class="primary-button mode-action">Search scrap</span>
+      </a>
+
+      <a class="mode-card inventory-mode-card" href="inventory.html?v=10">
+        <span class="mode-kicker">Quantity-controlled search</span>
+        <h2>Tracked inventory</h2>
+        <p>Find material with an inventory number, exact quantity, unit, and assigned location.</p>
+        <ul>
+          <li>The employee chooses the intended action.</li>
+          <li>Opening a record immediately creates a pending task.</li>
+          <li>Completing the transaction closes the alert.</li>
+        </ul>
+        <span class="primary-button mode-action">Search inventory</span>
+      </a>
     </section>
   </main>
 
   <footer>
-    <p><strong>Proof-of-concept scope:</strong> results are likely places to look, not verified quantities or availability.</p>
+    <p><strong>Demo alert:</strong> alerts appear in the admin dashboard. Email or text delivery can be added later.</p>
   </footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/supabase-config.js?v=1"></script>
-  <script type="module" src="js/app.js?v=8"></script>
+  <script type="module" src="js/home.js?v=10"></script>
 </body>
 </html>

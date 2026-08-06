@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17202a">
+  <title>Tracked Inventory · Page Steel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css?v=10">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Tracked inventory</p>
+      <h1>Find and update controlled inventory</h1>
+      <p>Opening an inventory record starts a required update. An unfinished update remains in the admin alert queue.</p>
+    </div>
+    <nav class="header-nav">
+      <a class="secondary-button" href="index.html?v=10">Choose search type</a>
+      <a class="secondary-button" href="inventory-add.html?v=10">Add inventory</a>
+      <a class="secondary-button" href="admin.html?v=10">Admin alerts</a>
+    </nav>
+  </header>
+
+  <main class="app-shell">
+    <section class="search-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="step-label">1 · Identify the transaction</p>
+          <h2>What inventory are you looking for?</h2>
+        </div>
+        <button id="clearSearch" class="text-button" type="button">Clear</button>
+      </div>
+
+      <label for="employeeName">Employee name</label>
+      <input id="employeeName" type="text" autocomplete="name" placeholder="First and last name">
+
+      <label for="inventoryAction">What are you doing?</label>
+      <select id="inventoryAction">
+        <option value="">Select an action</option>
+        <option value="verify">Checking availability and confirming quantity</option>
+        <option value="remove">Using or removing material</option>
+        <option value="receive">Receiving material</option>
+        <option value="move">Moving the complete inventory record</option>
+        <option value="count">Counting inventory</option>
+      </select>
+
+      <label for="material">Material</label>
+      <select id="material"><option value="">Any material</option></select>
+
+      <label for="form">Profile or form</label>
+      <select id="form"><option value="">Any profile</option></select>
+
+      <label for="query">Inventory number, size, grade, or description</label>
+      <input id="query" type="search" placeholder="Example: PS-000421 or 2-inch square tube">
+
+      <button id="searchButton" class="primary-button" type="button">Find tracked inventory</button>
+      <div id="status" class="status-box" aria-live="polite">Connecting to tracked inventory…</div>
+
+      <section class="results-section">
+        <div class="panel-heading compact">
+          <h2>Inventory records</h2>
+          <span id="resultCount" class="count-badge">0</span>
+        </div>
+        <div id="results" class="results-list"><p class="empty-state">Search results will appear here.</p></div>
+      </section>
+
+      <section id="inventoryUpdatePanel" class="inventory-update-panel hidden">
+        <p class="step-label">Required update</p>
+        <h2>Complete this inventory action</h2>
+        <div id="inventorySelectedSummary" class="status-box"></div>
+
+        <label id="quantityPrompt" for="inventoryQuantity">Observed quantity</label>
+        <input id="inventoryQuantity" type="number" min="0" step="0.001" inputmode="decimal">
+
+        <label for="inventoryUnit">Unit</label>
+        <select id="inventoryUnit">
+          <option value="">Select unit</option>
+          <option>Pieces</option><option>Sheets</option><option>Plates</option>
+          <option>Bundles</option><option>Pounds</option><option>Tons</option>
+          <option>Linear feet</option><option>Square feet</option>
+          <option>Pallets</option><option>Bins</option>
+        </select>
+
+        <div id="destinationField" class="hidden">
+          <label for="destinationLocation">Destination location code</label>
+          <input id="destinationLocation" type="text" placeholder="Example: WY-R05-L2">
+          <p class="helper">This first version moves the complete inventory record. Partial moves should become a separate record.</p>
+        </div>
+
+        <label for="inventoryNote">Transaction note</label>
+        <textarea id="inventoryNote" maxlength="500" placeholder="Job number, discrepancy, reason, or note"></textarea>
+
+        <div class="button-row inventory-action-buttons">
+          <button id="completeInventoryUpdate" class="primary-button" type="button">Complete required update</button>
+          <button id="cannotVerify" class="secondary-button danger-outline" type="button">Cannot verify — alert administrator</button>
+        </div>
+        <div id="updateStatus" class="status-box" aria-live="polite">Open an inventory result to begin.</div>
+      </section>
+    </section>
+
+    <section class="map-panel">
+      <div class="map-toolbar">
+        <div>
+          <p class="step-label">2 · Locate and update</p>
+          <h2>Page Steel yard</h2>
+        </div>
+        <span class="privacy-note">Opening a result creates a pending task</span>
+      </div>
+      <div id="map" role="application" aria-label="Interactive inventory location map"></div>
+      <p class="map-note">The location code identifies the rack, level, bin, or pile more precisely than GPS alone.</p>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/supabase-config.js?v=1"></script>
+  <script type="module" src="js/inventory.js?v=10"></script>
+</body>
+</html>

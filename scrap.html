@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17202a">
+  <title>Scrap Search · Page Steel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css?v=10">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Scrap or untracked material</p>
+      <h1>Find a likely material location</h1>
+      <p>Search by appearance and last known location. Stale photographs are added to the admin refresh queue.</p>
+    </div>
+    <nav class="header-nav">
+      <a class="secondary-button" href="index.html?v=10">Choose search type</a>
+      <a class="secondary-button" href="collect.html?v=10">Update scrap</a>
+      <a class="secondary-button" href="admin.html?v=10">Admin alerts</a>
+    </nav>
+  </header>
+
+  <main class="app-shell">
+    <section class="search-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="step-label">1 · Identify and describe</p>
+          <h2>What scrap are you looking for?</h2>
+        </div>
+        <button id="clearSearch" class="text-button" type="button">Clear</button>
+      </div>
+
+      <label for="employeeName">Employee name</label>
+      <input id="employeeName" type="text" autocomplete="name" placeholder="First and last name">
+
+      <label for="material">Material</label>
+      <select id="material"><option value="">Any material</option></select>
+
+      <label for="form">Profile or form</label>
+      <select id="form"><option value="">Any profile</option></select>
+
+      <label for="query">Description or ordinary name</label>
+      <input id="query" type="search" placeholder="Example: rusted square tubing, 4-inch angle">
+      <p class="helper">Every search is logged. Photos older than 90 days create an admin refresh task.</p>
+
+      <button id="searchButton" class="primary-button" type="button">Find scrap locations</button>
+      <div id="status" class="status-box" aria-live="polite">Connecting to scrap records…</div>
+
+      <section class="results-section">
+        <div class="panel-heading compact">
+          <h2>Likely locations</h2>
+          <span id="resultCount" class="count-badge">0</span>
+        </div>
+        <div id="results" class="results-list"><p class="empty-state">Search results will appear here.</p></div>
+      </section>
+    </section>
+
+    <section class="map-panel">
+      <div class="map-toolbar">
+        <div>
+          <p class="step-label">2 · Review matches</p>
+          <h2>Page Steel yard</h2>
+        </div>
+        <span class="privacy-note">Pins appear only after a search</span>
+      </div>
+      <div id="map" role="application" aria-label="Interactive scrap location map"></div>
+      <p class="map-note">The yellow outline shows the traced Page Steel site boundary.</p>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/supabase-config.js?v=1"></script>
+  <script type="module" src="js/scrap.js?v=10"></script>
+</body>
+</html>

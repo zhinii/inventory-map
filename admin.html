@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17202a">
+  <title>Admin Alerts · Page Steel</title>
+  <link rel="stylesheet" href="css/styles.css?v=10">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Inventory management</p>
+      <h1>Admin alerts and refresh queue</h1>
+      <p>Review unfinished inventory actions, stale scrap photographs, and recent searches.</p>
+    </div>
+    <nav class="header-nav">
+      <a class="secondary-button" href="index.html?v=10">Material search</a>
+      <a class="secondary-button" href="collect.html?v=10">Update scrap</a>
+      <a class="secondary-button" href="inventory-add.html?v=10">Update inventory</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <section class="admin-summary card-like">
+      <div class="panel-heading">
+        <div>
+          <p class="step-label">Current workload</p>
+          <h2>Open maintenance items</h2>
+        </div>
+        <button id="refreshAdmin" class="secondary-button" type="button">Refresh</button>
+      </div>
+      <label for="adminName">Administrator name</label>
+      <input id="adminName" type="text" autocomplete="name" placeholder="Name used when resolving alerts">
+      <div class="admin-metrics">
+        <div><strong id="openTaskCount">0</strong><span>Open alerts</span></div>
+        <div><strong id="urgentTaskCount">0</strong><span>High or urgent</span></div>
+        <div><strong id="staleScrapCount">0</strong><span>Stale scrap photos</span></div>
+        <div><strong id="todaySearchCount">0</strong><span>Searches today</span></div>
+      </div>
+      <div id="adminStatus" class="status-box">Loading dashboard…</div>
+    </section>
+
+    <section class="admin-grid">
+      <div class="card-like">
+        <div class="panel-heading compact"><h2>Open alerts</h2><span id="taskBadge" class="count-badge">0</span></div>
+        <div id="reviewTasks" class="admin-list"><p class="empty-state">Loading alerts…</p></div>
+      </div>
+
+      <div class="card-like">
+        <div class="panel-heading compact"><h2>Scrap photo refresh queue</h2><span id="staleBadge" class="count-badge">0</span></div>
+        <div id="staleScrap" class="admin-list"><p class="empty-state">Loading stale records…</p></div>
+      </div>
+    </section>
+
+    <section class="card-like">
+      <div class="panel-heading compact"><h2>Recent searches</h2><span id="searchBadge" class="count-badge">0</span></div>
+      <div id="recentSearches" class="admin-list"><p class="empty-state">Loading search history…</p></div>
+    </section>
+  </main>
+
+  <script src="js/supabase-config.js?v=1"></script>
+  <script type="module" src="js/admin.js?v=10"></script>
+</body>
+</html>

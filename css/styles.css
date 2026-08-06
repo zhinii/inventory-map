@@ -114,3 +114,218 @@ footer{padding:18px clamp(18px,4vw,52px);background:#fff;border-top:1px solid va
   .nearby-card img,.manage-card img{width:86px;height:86px}
   #collectorMap{height:52vh;min-height:390px}
 }
+
+/* Version 10: scrap and tracked inventory workflows */
+
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mode-shell,
+.admin-shell,
+.inventory-add-shell {
+  width: min(1180px, calc(100% - 28px));
+  margin: 28px auto;
+}
+
+.mode-intro {
+  max-width: 760px;
+  margin-bottom: 22px;
+}
+
+.mode-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.mode-card {
+  display: flex;
+  min-height: 360px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+  background: var(--panel, #1d2731);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+
+.mode-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 212, 0, 0.55);
+}
+
+.inventory-mode-card {
+  border-color: rgba(74, 163, 255, 0.45);
+}
+
+.mode-kicker {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.mode-card ul {
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.mode-action {
+  margin-top: auto;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.inventory-update-panel {
+  margin-top: 22px;
+  padding: 20px;
+  border: 2px solid rgba(74, 163, 255, 0.55);
+  border-radius: 16px;
+  background: rgba(74, 163, 255, 0.08);
+}
+
+.inventory-action-buttons {
+  margin-top: 14px;
+}
+
+.danger-outline {
+  border-color: #ff8c8c !important;
+  color: #ffd0d0 !important;
+}
+
+.freshness-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.freshness-badge.current {
+  background: rgba(63, 191, 127, 0.18);
+  color: #9ff0c5;
+}
+
+.freshness-badge.stale {
+  background: rgba(255, 181, 71, 0.18);
+  color: #ffd08c;
+}
+
+.freshness-badge.inventory {
+  background: rgba(74, 163, 255, 0.18);
+  color: #a8d2ff;
+}
+
+.inventory-result-card {
+  border-left: 4px solid #4aa3ff;
+}
+
+.admin-summary {
+  margin-bottom: 20px;
+}
+
+.admin-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.admin-metrics > div {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-metrics strong,
+.admin-metrics span {
+  display: block;
+}
+
+.admin-metrics strong {
+  font-size: 1.8rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-task,
+.search-log-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.search-log-row {
+  grid-template-columns: 1fr;
+}
+
+.admin-task img {
+  width: 110px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.priority-high,
+.priority-urgent {
+  border-left: 4px solid #ff8c5a;
+}
+
+.inventory-add-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#inventoryMap {
+  min-height: 430px;
+  margin: 12px 0;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 780px) {
+  .mode-card-grid,
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .header-nav {
+    width: 100%;
+  }
+
+  .header-nav .secondary-button {
+    flex: 1 1 180px;
+    text-align: center;
+  }
+}

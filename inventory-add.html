@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17202a">
+  <title>Add Tracked Inventory · Page Steel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css?v=10">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Tracked inventory setup</p>
+      <h1>Add or replace a tracked inventory record</h1>
+      <p>Inventory numbers are permanent. Reusing an existing number updates that record.</p>
+    </div>
+    <nav class="header-nav">
+      <a class="secondary-button" href="index.html?v=10">Material search</a>
+      <a class="secondary-button" href="inventory.html?v=10">Search inventory</a>
+      <a class="secondary-button" href="admin.html?v=10">Admin alerts</a>
+    </nav>
+  </header>
+
+  <main class="inventory-add-shell">
+    <section class="card-like inventory-add-form">
+      <div class="field-grid">
+        <label>Employee name
+          <input id="employeeName" type="text" autocomplete="name" placeholder="First and last name">
+        </label>
+        <label>Inventory number
+          <input id="inventoryNumber" type="text" placeholder="Example: PS-000421">
+        </label>
+        <label>Material
+          <select id="material"><option value="">Select material</option></select>
+        </label>
+        <label>Profile or form
+          <select id="profile"><option value="">Select profile</option></select>
+        </label>
+        <label>Grade or alloy
+          <input id="grade" type="text" placeholder="Example: A500">
+        </label>
+        <label>Size description
+          <input id="sizeDescription" type="text" placeholder="Example: 2 × 2 × 0.125 in, 20 ft">
+        </label>
+        <label>Exact quantity
+          <input id="exactQuantity" type="number" min="0" step="0.001" inputmode="decimal">
+        </label>
+        <label>Quantity unit
+          <select id="quantityUnit">
+            <option value="">Select unit</option>
+            <option>Pieces</option><option>Sheets</option><option>Plates</option>
+            <option>Bundles</option><option>Pounds</option><option>Tons</option>
+            <option>Linear feet</option><option>Square feet</option>
+            <option>Pallets</option><option>Bins</option>
+          </select>
+        </label>
+        <label>Location code
+          <input id="locationCode" type="text" placeholder="Example: WY-R05-L2">
+        </label>
+      </div>
+
+      <label for="photoInput">Current inventory photo</label>
+      <input id="photoInput" type="file" accept="image/*">
+      <img id="photoPreview" class="upload-preview hidden" alt="Selected inventory photograph">
+      <div id="photoStatus" class="status-box">No photo selected.</div>
+
+      <h2>Confirm location</h2>
+      <p class="helper">Photo GPS is used first when available. Phone GPS is the fallback. Tap the map to adjust the pin.</p>
+      <div id="inventoryMap" role="application" aria-label="Inventory location map"></div>
+      <div id="coordinateStatus" class="metadata">No location selected.</div>
+
+      <button id="saveInventory" class="primary-button" type="button">Save tracked inventory</button>
+      <div id="saveStatus" class="status-box">Complete all required fields.</div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js"></script>
+  <script src="js/supabase-config.js?v=1"></script>
+  <script type="module" src="js/inventory-add.js?v=10"></script>
+</body>
+</html>
